@@ -34,15 +34,14 @@ const emailShare = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeUR
     <slot />
 
     <aside class="share-panel" aria-labelledby="share-heading">
-      <p class="eyebrow">Share this article</p>
-      <h2 id="share-heading">Keep the conversation going.</h2>
+      <h2 id="share-heading">Share this article.</h2>
       <p>If this gave you a useful idea, pass it on to someone who might see it differently.</p>
       <nav class="share-links" aria-label="Share this article">
         <a href={linkedInShare} target="_blank" rel="noopener noreferrer">LinkedIn</a>
         <span aria-hidden="true">·</span>
         <a href={emailShare}>Email</a>
         <span aria-hidden="true">·</span>
-        <button class="copy-link" type="button" data-copy-url={shareUrl}>Copy link</button>
+        <a class="copy-link" href={shareUrl} data-copy-url={shareUrl}>Copy link</a>
       </nav>
     </aside>
 
@@ -62,15 +61,16 @@ const emailShare = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeUR
   </article>
 
   <script is:inline>
-    document.querySelectorAll('.copy-link').forEach((button) => {
-      button.addEventListener('click', async () => {
-        const url = button.getAttribute('data-copy-url');
+    document.querySelectorAll('.copy-link').forEach((link) => {
+      link.addEventListener('click', async (event) => {
+        event.preventDefault();
+        const url = link.getAttribute('data-copy-url');
         if (!url) return;
         try {
           await navigator.clipboard.writeText(url);
-          const original = button.textContent;
-          button.textContent = 'Copied';
-          setTimeout(() => (button.textContent = original), 1500);
+          const original = link.textContent;
+          link.textContent = 'Copied';
+          setTimeout(() => (link.textContent = original), 1500);
         } catch {
           window.prompt('Copy this link:', url);
         }
