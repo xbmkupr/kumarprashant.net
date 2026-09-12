@@ -10,7 +10,7 @@ import ArticleLayout from '../../layouts/ArticleLayout.astro';
   <p class="article-kicker">A small voice prototype became a useful architecture experiment in channel independence, conversational context and the difference between a customer capability and a user interface.</p>
 
   <section class="case-summary" aria-label="Case study at a glance">
-    <div><span>What I built</span><strong>Voice-first outage and planned-work prototype</strong></div>
+    <div><span>What I built</span><strong>Voice-first customer service prototype</strong></div>
     <div><span>Architecture idea</span><strong>One journey, many channels</strong></div>
     <div><span>What changed</span><strong>Channel became an interface, not the capability boundary</strong></div>
     <div><span>Key lesson</span><strong>Context, identity and operational truth matter more than the device</strong></div>
@@ -32,15 +32,60 @@ import ArticleLayout from '../../layouts/ArticleLayout.astro';
 
   <h2>The architecture in one view</h2>
   <p>The experiment becomes more useful when the voice device is treated as one interchangeable channel rather than the centre of the solution.</p>
-  <div class="architecture-flow" role="img" aria-label="Customer channels consume reusable customer capabilities which use enterprise APIs, events and data backed by operational source systems">
-    <div class="flow-node"><span>Channels</span><strong>Voice · Web · AI assistant</strong></div>
-    <div class="flow-arrow" aria-hidden="true">↓</div>
-    <div class="flow-node emphasis"><span>Reusable customer capabilities</span><strong>Outage status · Restoration · Planned work</strong></div>
-    <div class="flow-arrow" aria-hidden="true">↓</div>
-    <div class="flow-node"><span>Enterprise services</span><strong>APIs · Events · Customer context · Identity</strong></div>
-    <div class="flow-arrow" aria-hidden="true">↓</div>
-    <div class="flow-node"><span>Operational truth</span><strong>Authoritative source systems</strong></div>
+
+  <div class="architecture-diagram" role="img" aria-label="Channels consume reusable customer capabilities, supported by enterprise services and authoritative operational source systems">
+    <div class="architecture-stage">
+      <span class="stage-label">Channels</span>
+      <h3>Customer channels</h3>
+      <ul>
+        <li>Voice assistant</li>
+        <li>Web portal</li>
+        <li>AI assistant</li>
+        <li>Contact centre</li>
+      </ul>
+    </div>
+
+    <div class="architecture-arrow" aria-hidden="true">→</div>
+
+    <div class="architecture-stage architecture-stage--highlight">
+      <span class="stage-label">Capability layer</span>
+      <h3>Reusable customer capabilities</h3>
+      <ul>
+        <li>Check outage status</li>
+        <li>Get restoration estimate</li>
+        <li>View planned work</li>
+        <li>Retain conversational context</li>
+      </ul>
+    </div>
+
+    <div class="architecture-arrow" aria-hidden="true">→</div>
+
+    <div class="architecture-stage">
+      <span class="stage-label">Enterprise services</span>
+      <h3>Shared services and controls</h3>
+      <ul>
+        <li>APIs and events</li>
+        <li>Customer context</li>
+        <li>Identity and consent</li>
+        <li>Business rules</li>
+      </ul>
+    </div>
+
+    <div class="architecture-arrow" aria-hidden="true">→</div>
+
+    <div class="architecture-stage">
+      <span class="stage-label">Operational truth</span>
+      <h3>Authoritative source systems</h3>
+      <ul>
+        <li>Outage data</li>
+        <li>Planned work schedules</li>
+        <li>Restoration updates</li>
+        <li>Operational systems of record</li>
+      </ul>
+    </div>
   </div>
+
+  <p class="architecture-caption">The key architecture shift is that the channel becomes an interface layer, while the capability, context and operational truth live behind it.</p>
 
   <h2>The first lesson: the portal is not the capability</h2>
   <p>Once the same outage information could be consumed through voice, the architectural boundary became clearer. “Check my outage” is a customer capability. A web page is one possible interface to that capability.</p>
