@@ -33,12 +33,18 @@ const emailShare = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeUR
 
     <slot />
 
-    <div class="article-tools" aria-label="Share this article">
-      <strong>Share</strong>
-      <a href={linkedInShare} target="_blank" rel="noopener noreferrer">LinkedIn</a>
-      <a href={emailShare}>Email</a>
-      <button class="copy-link" type="button" data-copy-url={shareUrl}>Copy link</button>
-    </div>
+    <aside class="share-panel" aria-labelledby="share-heading">
+      <div class="share-copy">
+        <p class="eyebrow">Share</p>
+        <h2 id="share-heading">Pass the idea on.</h2>
+        <p>If this sparked a useful architecture conversation, share it with someone who might add to it.</p>
+      </div>
+      <div class="share-actions" aria-label="Share this article">
+        <a class="share-button share-button--primary" href={linkedInShare} target="_blank" rel="noopener noreferrer">Share on LinkedIn</a>
+        <a class="share-button" href={emailShare}>Email</a>
+        <button class="share-button copy-link" type="button" data-copy-url={shareUrl}>Copy link</button>
+      </div>
+    </aside>
 
     <aside class="article-subscribe">
       <p class="eyebrow">Architecture Notes</p>
