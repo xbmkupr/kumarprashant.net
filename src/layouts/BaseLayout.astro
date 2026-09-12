@@ -1,0 +1,49 @@
+---
+import '../styles/global.css';
+const {
+  title = 'Prashant Kumar — Enterprise Strategy, Architecture & AI',
+  description = 'Practical writing, experiments and architecture notes on enterprise strategy, AI and digital transformation.',
+  image = '/social-card.png'
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="/" aria-label="Prashant Kumar home">
+          <span class="brand-mark">PK</span>
+          <span>Prashant Kumar</span>
+        </a>
+        <nav class="nav" aria-label="Primary navigation">
+          <a href="/lab/">Architecture Lab</a>
+          <a href="/writing/">Writing</a>
+          <a href="/experience/">Experience</a>
+          <a href="/about/">About</a>
+        </nav>
+      </div>
+    </header>
+    <main><slot /></main>
+    <footer class="footer">
+      <div class="container footer-inner">
+        <span>© {new Date().getFullYear()} Prashant Kumar</span>
+        <span>Enterprise strategy · Architecture · AI · Transformation</span>
+      </div>
+    </footer>
+  </body>
+</html>
