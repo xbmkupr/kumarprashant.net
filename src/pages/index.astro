@@ -45,10 +45,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <a class="card-link" href="/writing/">Browse writing →</a>
       </div>
       <div class="subscribe">
-        <p class="eyebrow">Subscribe</p>
+        <p class="eyebrow">Architecture Notes</p>
         <h2>Thinking in public.</h2>
         <p>Occasional notes on enterprise architecture, AI and technology transformation — grounded in practical experiments, prototypes and lessons learned.</p>
-        <p><strong>Subscription form connection to Buttondown is the next setup step.</strong></p>
+        <form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/kprashant" method="post">
+          <label class="sr-only" for="subscribe-email">Email address</label>
+          <input id="subscribe-email" type="email" name="email" placeholder="Your email address" autocomplete="email" required />
+          <input type="hidden" name="embed" value="1" />
+          <input type="hidden" name="utm_source" value="kumarprashant.net" />
+          <input type="hidden" name="utm_medium" value="website" />
+          <button type="submit">Subscribe</button>
+        </form>
+        <p class="subscribe-note">No weekly promise. Just worthwhile notes when there is something useful to share.</p>
       </div>
     </div>
   </section>
