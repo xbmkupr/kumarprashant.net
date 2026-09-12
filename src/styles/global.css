@@ -110,16 +110,16 @@ h3 { font-size: 1.2rem; }
 .comments-header p:not(.eyebrow) { color: var(--muted); }
 .footer { padding: 42px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: .92rem; }
 .footer-inner { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
-@media (min-width: 1400px) {
+@media (min-width: 1680px) {
   .share-rail {
     display: flex;
     position: fixed;
     top: 190px;
-    left: calc(50% + 430px);
-    width: 118px;
+    right: 28px;
+    width: 112px;
     flex-direction: column;
     gap: 9px;
-    padding-left: 18px;
+    padding-left: 16px;
     border-left: 1px solid var(--line);
     z-index: 5;
     font-size: .9rem;
