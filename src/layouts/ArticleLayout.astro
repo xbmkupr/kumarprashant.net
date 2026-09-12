@@ -18,6 +18,13 @@ const emailShare = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeUR
 ---
 <BaseLayout title={`${title} — Prashant Kumar`} description={description} image={image}>
   <article class="prose article-page">
+    <aside class="share-rail" aria-label="Share this article">
+      <span class="share-rail-label">Share</span>
+      <a href={linkedInShare} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href={emailShare}>Email</a>
+      <a class="copy-link" href={shareUrl} data-copy-url={shareUrl}>Copy link</a>
+    </aside>
+
     <header class="article-header">
       <p class="eyebrow">{eyebrow}</p>
       <h1>{title}</h1>
