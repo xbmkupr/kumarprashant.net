@@ -1,0 +1,74 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import GiscusComments from '../components/GiscusComments.astro';
+
+const {
+  title,
+  description,
+  eyebrow = 'Writing',
+  published,
+  updated,
+  image = '/social-card.png',
+  comments = true
+} = Astro.props;
+
+const shareUrl = new URL(Astro.url.pathname, Astro.site).toString();
+const linkedInShare = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+const emailShare = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(`${title}\n\n${shareUrl}`)}`;
+---
+<BaseLayout title={`${title} — Prashant Kumar`} description={description} image={image}>
+  <article class="prose article-page">
+    <header class="article-header">
+      <p class="eyebrow">{eyebrow}</p>
+      <h1>{title}</h1>
+      {description && <p class="lede">{description}</p>}
+      {(published || updated) && (
+        <p class="article-date">
+          {published && <>Published {published}</>}
+          {published && updated && <> · </>}
+          {updated && <>Updated {updated}</>}
+        </p>
+      )}
+    </header>
+
+    <slot />
+
+    <div class="article-tools" aria-label="Share this article">
+      <strong>Share</strong>
+      <a href={linkedInShare} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href={emailShare}>Email</a>
+      <button class="copy-link" type="button" data-copy-url={shareUrl}>Copy link</button>
+    </div>
+
+    <aside class="article-subscribe">
+      <p class="eyebrow">Architecture Notes</p>
+      <h2>More practical notes, occasionally.</h2>
+      <p>Enterprise architecture, AI and technology transformation — grounded in experiments, prototypes and lessons learned.</p>
+      <form action="https://buttondown.com/api/emails/embed-subscribe/kprashant" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/kprashant', 'popupwindow')" class="subscribe-form">
+        <label class="sr-only" for="article-email">Email address</label>
+        <input id="article-email" type="email" name="email" placeholder="you@example.com" required />
+        <input type="hidden" name="tag" value="website-article" />
+        <button type="submit">Subscribe</button>
+      </form>
+    </aside>
+
+    {comments && <GiscusComments />}
+  </article>
+
+  <script is:inline>
+    document.querySelectorAll('.copy-link').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const url = button.getAttribute('data-copy-url');
+        if (!url) return;
+        try {
+          await navigator.clipboard.writeText(url);
+          const original = button.textContent;
+          button.textContent = 'Copied';
+          setTimeout(() => (button.textContent = original), 1500);
+        } catch {
+          window.prompt('Copy this link:', url);
+        }
+      });
+    });
+  </script>
+</BaseLayout>
