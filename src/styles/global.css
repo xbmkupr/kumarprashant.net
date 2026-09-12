@@ -21,6 +21,7 @@ body {
 a { color: inherit; text-decoration: none; }
 a:hover { color: var(--blue); }
 img { max-width: 100%; display: block; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 .container { width: min(calc(100% - 40px), var(--max)); margin: 0 auto; }
 .site-header { position: sticky; top: 0; z-index: 20; background: rgba(246,242,233,.94); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(222,216,204,.8); }
 .header-inner { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
@@ -47,10 +48,15 @@ h3 { font-size: 1.2rem; }
 .card-link { font-weight: 700; margin-top: 22px; }
 .split { display: grid; grid-template-columns: 1.15fr .85fr; gap: 48px; align-items: start; }
 .subscribe { background: var(--navy); color: white; padding: 54px; }
+.subscribe .eyebrow { color: #7ea7ff; }
 .subscribe p { color: #d7deea; max-width: 680px; }
 .subscribe-form { display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap; }
-.subscribe-form input { flex: 1 1 260px; min-height: 48px; border: 1px solid #536074; background: #162438; color: white; padding: 0 16px; border-radius: 6px; }
-.subscribe-form button { min-height: 48px; padding: 0 20px; border: 0; border-radius: 6px; font-weight: 700; cursor: pointer; }
+.subscribe-form input { flex: 1 1 260px; min-height: 48px; border: 1px solid #536074; background: #162438; color: white; padding: 0 16px; border-radius: 6px; font: inherit; }
+.subscribe-form input::placeholder { color: #aeb9c9; }
+.subscribe-form input:focus { outline: 2px solid #7ea7ff; outline-offset: 2px; }
+.subscribe-form button { min-height: 48px; padding: 0 20px; border: 0; border-radius: 6px; font: inherit; font-weight: 700; cursor: pointer; background: white; color: var(--navy); }
+.subscribe-form button:hover { transform: translateY(-1px); }
+.subscribe-note { font-size: .86rem; margin: 14px 0 0; color: #9eabba !important; }
 .prose { width: min(calc(100% - 40px), 760px); margin: 0 auto; padding: 72px 0; }
 .prose h1 { font-size: clamp(2.8rem, 7vw, 5rem); }
 .prose h2 { margin-top: 48px; font-size: 2rem; }
