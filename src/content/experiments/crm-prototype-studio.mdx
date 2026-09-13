@@ -2,7 +2,7 @@
 title: CRM Prototype Studio
 description: What changes when AI-assisted delivery is treated as a governed engineering workflow rather than a code-generation shortcut?
 status: published
-published: September 2026
+published: 2026-09-13
 experimentNo: 1
 eyebrow: Architecture Lab · Experiment 01
 featured: true
@@ -18,124 +18,140 @@ tags:
 <p class="article-kicker">A prototype for moving from business requirement to reviewable solution artifacts across CRM, data and integration platforms — with deterministic generation, testing, version control and explicit human approval.</p>
 
 <section class="case-summary" aria-label="Case study at a glance">
-  <div><span>What I built</span><strong>AI-assisted requirement-to-solution control plane</strong></div>
-  <div><span>Architecture idea</span><strong>Govern the delivery workflow, not just the model</strong></div>
-  <div><span>What changed</span><strong>AI became one bounded step inside an evidence-driven pipeline</strong></div>
-  <div><span>Key lesson</span><strong>Trust comes from traceability, deterministic controls and explicit authority</strong></div>
+  <div><span>What I built</span><strong>AI-assisted enterprise delivery prototype</strong></div>
+  <div><span>Architecture idea</span><strong>Separate model reasoning from deterministic execution</strong></div>
+  <div><span>What changed</span><strong>AI became one participant in a governed delivery pipeline</strong></div>
+  <div><span>Key lesson</span><strong>Automation still needs identity, evidence, testing and explicit authority</strong></div>
 </section>
 
 ## The question
 
-AI coding tools can generate impressive outputs quickly. In enterprise delivery, however, speed is rarely the only constraint. Requirements change, approvals matter, environments differ, deployment authority is controlled and every meaningful change needs evidence.
+AI-assisted development is often discussed as a productivity story: generate some code, create a configuration or draft an integration faster. That is useful, but enterprise delivery raises a harder question:
 
-> Can AI accelerate solution delivery without allowing the model to become the architect, the deployer and the control system at the same time?
+> What would it take for AI-assisted delivery to become a controlled engineering capability rather than an increasingly powerful collection of shortcuts?
 
-I built the Prototype Studio to explore that boundary.
+I wanted to make that question concrete. The experiment became **CRM Prototype Studio**: a small orchestration layer that takes a business requirement, interprets it, produces a deployment plan and moves through reviewable stages across CRM, data and integration platforms.
 
 ## What I built
 
-The Studio takes a prepared or custom business requirement and turns it into a constrained, reviewable solution blueprint. That blueprint can then drive deterministic generation of architecture, traceability, data, CRM, integration and test artifacts.
+The prototype connected a requirement-driven workflow across a small Salesforce and Snowflake environment. Rather than allowing an AI model to make arbitrary changes directly, the workflow separated interpretation, generation, validation and deployment authority.
 
-The important part is what the Studio does *not* do. The model does not receive unrestricted authority to write arbitrary code into production systems. It interprets the requirement and proposes a structured blueprint. Approved generators then create artifacts from known patterns. Tests validate them. Humans approve progression. Git records the evidence.
+At a high level, the pattern looked like this:
 
-<div class="callout">
-  <strong>Prototype boundary</strong>
-  <p>The experiment uses synthetic data and controlled test environments. It does not contact real customers or treat AI-generated output as production-authorised simply because generation succeeded.</p>
+<div class="architecture-diagram architecture-diagram--extra-wide" role="img" aria-label="Business requirement flows through AI interpretation, deterministic generation, validation, human approval and controlled deployment">
+  <div class="architecture-stage"><span class="stage-label">Intent</span><h3>Business requirement</h3><ul><li>Desired outcome</li><li>Scope and constraints</li><li>Target platforms</li></ul></div>
+  <div class="architecture-arrow" aria-hidden="true">→</div>
+  <div class="architecture-stage architecture-stage--highlight"><span class="stage-label">Reasoning</span><h3>AI interpretation</h3><ul><li>Understand intent</li><li>Propose solution</li><li>Create execution plan</li></ul></div>
+  <div class="architecture-arrow" aria-hidden="true">→</div>
+  <div class="architecture-stage"><span class="stage-label">Engineering</span><h3>Deterministic generators</h3><ul><li>Metadata</li><li>SQL and configuration</li><li>Deployment artifacts</li></ul></div>
+  <div class="architecture-arrow" aria-hidden="true">→</div>
+  <div class="architecture-stage"><span class="stage-label">Evidence</span><h3>Validation and tests</h3><ul><li>Preflight</li><li>Validate only</li><li>Environment checks</li></ul></div>
+  <div class="architecture-arrow" aria-hidden="true">→</div>
+  <div class="architecture-stage"><span class="stage-label">Authority</span><h3>Human approval</h3><ul><li>Review plan</li><li>Approve boundary</li><li>Release authority</li></ul></div>
 </div>
 
-## The architecture in one view
+<p class="architecture-caption">AI can reason about the solution, but controlled delivery still depends on deterministic artifacts, validation evidence and explicit deployment authority.</p>
 
-The control point is the workflow around the model rather than the model itself.
+## The important boundary: AI proposes, engineering executes
 
-<div class="architecture-diagram architecture-diagram--extra-wide" role="img" aria-label="Business requirements are interpreted into a structured blueprint, approved by a human, converted into deterministic artifacts, validated across platforms and recorded as evidence before controlled execution can be considered">
-  <div class="architecture-stage">
-    <span class="stage-label">Requirement</span>
-    <h3>Business intent</h3>
-    <ul><li>Prepared journey</li><li>Custom requirement</li><li>Constraints and outcomes</li></ul>
-  </div>
-  <div class="architecture-arrow" aria-hidden="true">→</div>
-  <div class="architecture-stage architecture-stage--highlight">
-    <span class="stage-label">AI interpretation</span>
-    <h3>SolutionBlueprint</h3>
-    <ul><li>Strict schema</li><li>Approved patterns</li><li>No executable free-form code</li></ul>
-  </div>
-  <div class="architecture-arrow" aria-hidden="true">→</div>
-  <div class="architecture-stage">
-    <span class="stage-label">Human authority</span>
-    <h3>Baseline approval</h3>
-    <ul><li>Blueprint fingerprint</li><li>Explicit approval</li><li>Stale-change detection</li></ul>
-  </div>
-  <div class="architecture-arrow" aria-hidden="true">→</div>
-  <div class="architecture-stage">
-    <span class="stage-label">Deterministic delivery</span>
-    <h3>Generate and validate</h3>
-    <ul><li>CRM and data artifacts</li><li>Platform checks</li><li>Tests and manifests</li></ul>
-  </div>
-  <div class="architecture-arrow" aria-hidden="true">→</div>
-  <div class="architecture-stage">
-    <span class="stage-label">Evidence</span>
-    <h3>Git + approval chain</h3>
-    <ul><li>Versioned artifacts</li><li>Pull request</li><li>Dry-run evidence</li></ul>
-  </div>
-</div>
+The most useful architectural decision in the prototype was not which model to use. It was deciding where probabilistic reasoning should stop.
 
-<p class="architecture-caption">The model helps interpret intent. Deterministic components build. Tests verify. Humans authorise. The evidence chain connects every stage.</p>
+The model could interpret requirements, identify likely solution patterns and propose an execution plan. But the actual platform changes were produced through deterministic generators and known deployment mechanisms.
 
-## The first lesson: governance belongs in the workflow
+This creates a cleaner separation:
 
-A policy document can say that humans remain accountable, but that is weak protection if the delivery workflow allows AI-generated output to bypass review.
+- **AI interprets and proposes.**
+- **Generators create repeatable artifacts.**
+- **Tests establish evidence.**
+- **Humans retain deployment authority.**
 
-The prototype therefore turns governance into executable boundaries. A requirement baseline must be approved before artifact generation. Approval is bound to a fingerprint of the exact blueprint. If the blueprint changes, the previous approval is no longer valid.
+That separation reduces the temptation to give an increasingly capable model unrestricted authority simply because it can technically perform the action.
 
-Human-in-the-loop is not simply placing an approval button somewhere in the interface. The approval has to be bound to a specific decision, artifact and state.
+## Approval needs to approve something specific
 
-## The second lesson: AI should produce structure before it produces change
+A generic “human in the loop” statement sounds reassuring but can be architecturally weak. What exactly is the person approving?
 
-The Studio asks the model for a strict structured response rather than arbitrary executable code. That response becomes a **SolutionBlueprint**: a constrained representation of intent, architecture choices, platform actions and controls.
+The prototype therefore moved toward the idea of an approval fingerprint: the human approves a specific plan, set of target resources and generated artifacts. If the plan changes materially after approval, the previous approval should no longer be considered valid.
 
-This creates a useful separation between probabilistic interpretation and deterministic execution. The model can help translate ambiguous human requirements into structure, while generators and validators operate against known rules.
+That turns approval from a ceremonial click into a control boundary.
 
-> AI interprets and proposes. Deterministic generators build. Tests verify. Humans approve. GitHub records everything.
+<div class="callout"><strong>A useful control principle</strong><p>Human approval should bind to the thing being approved — not simply to the workflow instance that happened to ask for approval.</p></div>
 
-## The third lesson: evidence is an architecture concern
+## Preflight became more important than generation
 
-As the experiment evolved, the most interesting artifacts were not necessarily the generated CRM or data components. They were the fingerprints, manifests, validation reports, pull requests and approval records connecting the stages.
+It is easy to focus on whether AI can generate a Salesforce configuration or Snowflake change. In practice, environment readiness became just as important.
 
-That evidence answers questions that become increasingly important in AI-assisted delivery: Which requirement produced this artifact? Which model output was approved? Did the artifact change afterwards? Which environment was checked? What exactly was authorised?
+Before a deployment can be trusted, the workflow needs to know whether the target environment is reachable, whether credentials are valid, whether required services exist and whether the identity executing the change has the expected permissions.
 
-Traceability therefore stopped being documentation produced after delivery. It became part of the delivery architecture itself.
+That led to a connected **read-only preflight** stage. The workflow could verify Salesforce and Snowflake connectivity without making changes. If preflight failed, deployment remained blocked.
 
-## The fourth lesson: deployment deserves a separate authority boundary
+That may sound mundane, but it is exactly the sort of control that separates a compelling demo from something that could eventually fit into an enterprise engineering process.
 
-Generating a valid artifact is not the same as authorising a deployment. The Studio deliberately separates those concerns.
+## Validation before deployment
 
-Platform checks can verify that the target environment is the expected one and that required CRM and data objects exist. A dry-run can prove that a proposed plan is internally consistent. Neither event automatically grants mutation authority.
+The prototype also introduced a dry-run pattern in which the plan could move through validation without performing external delivery.
 
-A separate, short-lived approval is bound to the exact manifest, commit, environment and validation evidence. This makes deployment an explicit authority decision rather than the natural next click after successful generation.
+For example:
+
+- Snowflake changes could run through validation logic.
+- Salesforce configuration could be checked against the connected environment.
+- External delivery could remain simulation-only.
+- Evidence could be collected before asking for deployment approval.
+
+This creates a much stronger conversation with reviewers than “the AI thinks this will work.”
+
+The workflow can instead say: **this is the proposed change, this is the environment we checked, and this is the evidence produced before deployment.**
+
+## Git became part of the control plane
+
+Version control was useful for more than storing source code. It became the place where generated artifacts, manifests, plans and evidence could be associated with an immutable point in time.
+
+That matters because AI-assisted engineering creates a traceability problem. If an artefact was generated from a requirement, modified through a model-driven workflow and approved by a human, the organisation needs a way to reconstruct what happened later.
+
+Git gives us one piece of that answer:
+
+> requirement → generated artifacts → validation evidence → approval → deployed version
+
+The model conversation itself is not enough. The engineering record needs to survive independently of the model session.
+
+## The architecture implication: an agent control plane
+
+As the prototype evolved, I stopped thinking of it simply as an AI development assistant. A more interesting pattern was emerging.
+
+An enterprise agent needs boundaries around:
+
+- identity;
+- permissions;
+- available tools;
+- target environments;
+- policy;
+- approval;
+- evidence;
+- observability;
+- deployment authority.
+
+Together those controls start to resemble an **agent control plane**.
+
+The model is one component. The architecture around the model determines what it is allowed to know, propose and change.
 
 ## Why this matters beyond software development
 
-The pattern is broader than AI coding. Any enterprise agent that can propose and eventually execute meaningful change needs similar separation of concerns:
+Although the prototype used CRM, Snowflake and deployment workflows, the pattern is much broader.
 
-- **Intent** — what outcome is being requested?
-- **Interpretation** — what does the agent believe that means?
-- **Authority** — what is the agent allowed to do?
-- **Validation** — what evidence must exist before progression?
-- **Execution** — which actions may actually mutate an environment?
-- **Audit** — can the decision chain be reconstructed later?
+The same architecture question appears whenever an enterprise agent can take meaningful action: resolving a customer issue, adjusting an operational process, changing data, initiating a financial transaction or coordinating other agents.
 
-That is why I increasingly think of this prototype as an **agent control-plane experiment** rather than simply an AI development accelerator.
+The more capable the agent becomes, the less sufficient “human in the loop” becomes as a governance strategy. Enterprises need explicit control boundaries and observable evidence.
 
 ## What I would do next
 
-The next evolution is to make the control plane more platform-neutral. Instead of treating CRM, data and integration validators as one-off integrations, I would model them as adapters behind a common contract for identity, capability discovery, validation, authority and evidence.
+A production-oriented version would strengthen the control plane rather than simply adding more model capability. I would focus on policy evaluation, workload identity, short-lived credentials, approval binding, evidence retention and environment-specific deployment authority.
 
-That would allow the same governance model to coordinate different AI agents, delivery platforms and enterprise tools without making the control plane dependent on one vendor's agent framework.
+I would also separate the orchestration layer from individual technology adapters so new platforms could be added without changing the governance model.
 
 ## What I learned
 
-The prototype started as an experiment in accelerating delivery. It became more valuable as an experiment in controlling acceleration.
+The experiment started as a question about AI-assisted delivery speed. It ended up reinforcing a more useful architecture lesson:
 
-The strongest insight was that responsible enterprise AI is not achieved by making the model perfectly reliable. It comes from designing a system where uncertainty is expected, authority is explicit, deterministic controls surround probabilistic reasoning, and evidence is generated as the work progresses.
+> The difficult part of enterprise agentic AI is unlikely to be getting the model to perform an action. The difficult part is designing the system that decides when that action is allowed, proves what happened and retains human authority where it matters.
 
-That is a much more useful architecture problem than asking whether an AI model can generate code.
+That is the direction I want to keep exploring in the Architecture Lab: not simply whether AI can do more, but how enterprises can let it do more without giving up engineering discipline.
