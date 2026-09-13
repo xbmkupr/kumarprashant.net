@@ -53,13 +53,14 @@ for (const item of items) {
 
 const currentYear = new Date().getUTCFullYear();
 const formatDay = (date) => new Intl.DateTimeFormat('en-AU', { day: '2-digit', timeZone: 'UTC' }).format(date);
+const itemLabel = (count) => `${count} ${count === 1 ? 'item' : 'items'}`;
 ---
 <BaseLayout title="Archive — Prashant Kumar" description="A chronological archive of Architecture Lab experiments and writing.">
   <section class="hero archive-hero">
     <div class="container">
       <p class="eyebrow">Archive</p>
       <h1>Everything, in time.</h1>
-      <p class="lede">A chronological record of published experiments and writing. Migrated articles retain their original publication dates.</p>
+      <p class="lede">A chronological record of published experiments and writing.</p>
     </div>
   </section>
 
@@ -69,36 +70,42 @@ const formatDay = (date) => new Intl.DateTimeFormat('en-AU', { day: '2-digit', t
         <p class="archive-empty">Published work will appear here as the archive grows.</p>
       ) : (
         <div class="archive-tree">
-          {[...years.entries()].map(([year, months], yearIndex) => (
-            <details class="archive-year" open={year === currentYear || yearIndex === 0}>
-              <summary>
-                <span class="archive-year-title">{year}</span>
-                <span class="archive-year-count">{[...months.values()].reduce((count, monthItems) => count + monthItems.length, 0)} items</span>
-              </summary>
+          {[...years.entries()].map(([year, months], yearIndex) => {
+            const yearCount = [...months.values()].reduce((count, monthItems) => count + monthItems.length, 0);
+            return (
+              <details class="archive-year" open={year === currentYear || yearIndex === 0}>
+                <summary>
+                  <span class="archive-year-title">{year}</span>
+                  <span class="archive-year-count">{itemLabel(yearCount)}</span>
+                </summary>
 
-              <div class="archive-months">
-                {[...months.entries()].map(([month, monthItems]) => (
-                  <section class="archive-month">
-                    <h2>{month}</h2>
-                    <div class="archive-items">
-                      {monthItems.map((item) => (
-                        <article class="archive-item">
-                          <time datetime={item.published}>{formatDay(item.date)}</time>
-                          <div class="archive-item-main">
-                            <a class="archive-item-title" href={item.href}>{item.title}</a>
-                            <span class="archive-item-type">{item.type}</span>
-                          </div>
-                          <div class="archive-item-tags" aria-label="Topics">
-                            {item.tags.slice(0, 2).map((tag) => <span>{tag}</span>)}
-                          </div>
-                        </article>
-                      ))}
-                    </div>
-                  </section>
-                ))}
-              </div>
-            </details>
-          ))}
+                <div class="archive-months">
+                  {[...months.entries()].map(([month, monthItems]) => (
+                    <details class="archive-month" open>
+                      <summary class="archive-month-summary">
+                        <h2>{month}</h2>
+                        <span class="archive-month-count">{itemLabel(monthItems.length)}</span>
+                      </summary>
+                      <div class="archive-items">
+                        {monthItems.map((item) => (
+                          <article class="archive-item">
+                            <time datetime={item.published}>{formatDay(item.date)}</time>
+                            <div class="archive-item-main">
+                              <a class="archive-item-title" href={item.href}>{item.title}</a>
+                              <span class="archive-item-type">{item.type}</span>
+                            </div>
+                            <div class="archive-item-tags" aria-label="Topics">
+                              {item.tags.slice(0, 2).map((tag) => <span>{tag}</span>)}
+                            </div>
+                          </article>
+                        ))}
+                      </div>
+                    </details>
+                  ))}
+                </div>
+              </details>
+            );
+          })}
         </div>
       )}
     </div>
