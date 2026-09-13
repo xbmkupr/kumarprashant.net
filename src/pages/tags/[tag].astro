@@ -1,0 +1,59 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const slugify = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+export async function getStaticPaths() {
+  const experiments = await getCollection('experiments');
+  const writing = await getCollection('writing');
+  const all = [...experiments, ...writing];
+  const tags = [...new Set(all.flatMap((entry) => entry.data.tags))];
+  return tags.map((tag) => ({ params: { tag: slugify(tag) }, props: { tag } }));
+}
+
+const { tag } = Astro.props;
+const experiments = (await getCollection('experiments')).filter((entry) => entry.data.tags.includes(tag));
+const writing = (await getCollection('writing')).filter((entry) => entry.data.tags.includes(tag));
+---
+<BaseLayout title={`${tag} — Prashant Kumar`} description={`Experiments and writing tagged ${tag}.`}>
+  <section class="hero">
+    <div class="container">
+      <p class="eyebrow">Topic</p>
+      <h1>{tag}</h1>
+      <p class="lede">Experiments, articles and notes connected by this topic.</p>
+    </div>
+  </section>
+
+  {experiments.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <p class="eyebrow">Architecture Lab</p>
+        <div class="grid">
+          {experiments.map((entry) => (
+            <article class="card">
+              <div><p class="meta">Experiment {String(entry.data.experimentNo).padStart(2, '0')} · {entry.data.status}</p><h3>{entry.data.title}</h3><p>{entry.data.summary ?? entry.data.description}</p></div>
+              {entry.data.status === 'published' ? <a class="card-link" href={`/lab/${entry.id}/`}>Read the case study →</a> : <span class="card-link">On the roadmap</span>}
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {writing.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <p class="eyebrow">Writing</p>
+        <div class="grid">
+          {writing.map((entry) => (
+            <article class="card">
+              <div><p class="meta">{entry.data.category ?? entry.data.status}</p><h3>{entry.data.title}</h3><p>{entry.data.summary ?? entry.data.description}</p></div>
+              {entry.data.status === 'published' ? <a class="card-link" href={`/writing/${entry.id}/`}>Read the article →</a> : <span class="card-link">Planned article</span>}
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</BaseLayout>
