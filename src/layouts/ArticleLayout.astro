@@ -29,7 +29,7 @@ const formatDate = (value) => {
   return new Intl.DateTimeFormat('en-AU', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(Date.UTC(year, month - 1, day)));
 };
 ---
-<BaseLayout title={`${title} — Prashant Kumar`} description={description} image={image}>
+<BaseLayout title={`${title} — Prashant Kumar`} description={description} image={image} type="article">
   <article class="prose article-page">
     <aside class="share-rail" aria-label="Share this article">
       <span class="share-rail-label">Share</span>
