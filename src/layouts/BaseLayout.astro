@@ -7,11 +7,13 @@ import '../styles/writing.css';
 import '../styles/icons.css';
 import '../styles/overrides.css';
 const {
-  title = 'Prashant Kumar — Enterprise Strategy, Architecture & AI',
-  description = 'Practical writing, experiments and architecture notes on enterprise strategy, AI and digital transformation.',
-  image = '/social-card.webp'
+  title = 'Prashant Kumar — Enterprise Strategy & Architecture',
+  description = 'Enterprise strategy, architecture and responsible AI — practical thinking, experiments and writing from Prashant Kumar.',
+  image = '/social-card.webp',
+  type = 'website'
 } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const socialImage = new URL(image, Astro.site);
 const pathname = Astro.url.pathname;
 const isActive = (section) => pathname === section || pathname.startsWith(`${section}/`);
 ---
@@ -23,12 +25,22 @@ const isActive = (section) => pathname === section || pathname.startsWith(`${sec
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta property="og:type" content="website" />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content="Prashant Kumar" />
+    <meta property="og:locale" content="en_AU" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:alt" content="Prashant Kumar — Enterprise Strategy, Architecture and Responsible AI" />
+
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+    <meta name="twitter:image:alt" content="Prashant Kumar — Enterprise Strategy, Architecture and Responsible AI" />
+
     <ClientRouter />
     <title>{title}</title>
   </head>
