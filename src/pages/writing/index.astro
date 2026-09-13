@@ -1,11 +1,34 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const entries = await getCollection('writing');
 ---
 <BaseLayout title="Writing — Prashant Kumar" description="Writing on enterprise architecture, AI, digital transformation and technology strategy.">
-  <section class="hero"><div class="container"><p class="eyebrow">Writing</p><h1>Ideas, observations and lessons from the work.</h1><p class="lede">Longer-form notes on enterprise architecture, AI, transformation and the practical trade-offs behind technology decisions.</p></div></section>
-  <section class="section"><div class="container"><div class="grid">
-    <article class="card"><div><p class="meta">Architecture</p><h3>The Model Is Not the Architecture</h3><p>Why enterprise AI governance needs policy, identity, observability and control beyond model choice.</p></div><span class="card-link">Planned article</span></article>
-    <article class="card"><div><p class="meta">Customer experience</p><h3>One Journey, Many Channels</h3><p>Why the portal should not define the boundary of customer experience.</p></div><span class="card-link">Planned article</span></article>
-    <article class="card"><div><p class="meta">Architecture</p><h3>What Happens When Enterprise Architecture Becomes Machine-Readable?</h3><p>An exploration of AI-assisted architecture reasoning and decision intelligence.</p></div><span class="card-link">Planned article</span></article>
-  </div></div></section>
+  <section class="hero">
+    <div class="container">
+      <p class="eyebrow">Writing</p>
+      <h1>Ideas, observations and lessons from the work.</h1>
+      <p class="lede">Longer-form notes on enterprise architecture, AI, transformation and the practical trade-offs behind technology decisions.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container grid">
+      {entries.map((entry) => (
+        <article class="card">
+          <div>
+            <p class="meta">{entry.data.category ?? entry.data.status}</p>
+            <h3>{entry.data.title}</h3>
+            <p>{entry.data.summary ?? entry.data.description}</p>
+            <div class="tag-list" aria-label="Topics">
+              {entry.data.tags.slice(0, 4).map((tag) => <a class="tag-pill" href={`/tags/${encodeURIComponent(tag.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''))}/`}>{tag}</a>)}
+            </div>
+          </div>
+          {entry.data.status === 'published'
+            ? <a class="card-link" href={`/writing/${entry.id}/`}>Read the article →</a>
+            : <span class="card-link">Planned article</span>}
+        </article>
+      ))}
+    </div>
+  </section>
 </BaseLayout>
