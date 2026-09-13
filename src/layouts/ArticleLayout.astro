@@ -19,10 +19,14 @@ const emailShare = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeUR
 const tagSlug = (tag) => tag.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const formatDate = (value) => {
   if (!value) return value;
+  if (value instanceof Date) {
+    return new Intl.DateTimeFormat('en-AU', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(value);
+  }
+  if (typeof value !== 'string') return String(value);
   const iso = /^\d{4}-\d{2}-\d{2}$/.test(value);
   if (!iso) return value;
   const [year, month, day] = value.split('-').map(Number);
-  return new Intl.DateTimeFormat('en-AU', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(Date.UTC(year, month - 1, day)));
+  return new Intl.DateTimeFormat('en-AU', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(Date.UTC(year, month - 1, day)));
 };
 ---
 <BaseLayout title={`${title} — Prashant Kumar`} description={description} image={image}>
