@@ -1,10 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionMark from '../../components/SectionMark.astro';
 ---
 <BaseLayout title="About — Prashant Kumar" description="About Prashant Kumar and his work across enterprise strategy, architecture, AI and transformation.">
   <section class="hero">
     <div class="container">
-      <p class="eyebrow">About</p>
+      <div class="section-identity"><SectionMark kind="about" size="md" tone="blue" /><p class="eyebrow">About</p></div>
       <h1>I work where strategy meets<br/>architecture and delivery.</h1>
       <p class="lede">My work sits at the intersection of enterprise strategy and architecture — modernising complex technology estates, navigating major technology choices and harnessing AI responsibly while balancing resilience, regulation, cost and long-term optionality.</p>
     </div>
