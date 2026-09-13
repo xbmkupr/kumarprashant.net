@@ -52,7 +52,7 @@ for (const item of items) {
 }
 
 const currentYear = new Date().getUTCFullYear();
-const formatDay = (date) => new Intl.DateTimeFormat('en-AU', { day: '2-digit', timeZone: 'UTC' }).format(date);
+const formatDate = (date) => new Intl.DateTimeFormat('en-AU', { day: '2-digit', month: 'short', timeZone: 'UTC' }).format(date);
 const itemLabel = (count) => `${count} ${count === 1 ? 'item' : 'items'}`;
 ---
 <BaseLayout title="Archive — Prashant Kumar" description="A chronological archive of Architecture Lab experiments and writing.">
@@ -89,7 +89,7 @@ const itemLabel = (count) => `${count} ${count === 1 ? 'item' : 'items'}`;
                       <div class="archive-items">
                         {monthItems.map((item) => (
                           <article class="archive-item">
-                            <time datetime={item.published}>{formatDay(item.date)}</time>
+                            <time datetime={item.published}>{formatDate(item.date)}</time>
                             <div class="archive-item-main">
                               <a class="archive-item-title" href={item.href}>{item.title}</a>
                               <span class="archive-item-type">{item.type}</span>
