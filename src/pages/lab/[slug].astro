@@ -1,0 +1,22 @@
+---
+import { getCollection, render } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('experiments', ({ data }) => data.status === 'published');
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const data = entry.data;
+---
+<ArticleLayout
+  title={data.title}
+  description={data.description}
+  eyebrow={data.eyebrow ?? `Architecture Lab · Experiment ${String(data.experimentNo).padStart(2, '0')}`}
+  published={data.published}
+  updated={data.updated}
+>
+  <Content />
+</ArticleLayout>
