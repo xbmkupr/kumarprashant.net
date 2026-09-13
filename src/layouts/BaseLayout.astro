@@ -49,20 +49,20 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       </div>
     </header>
     <main><slot /></main>
-    <footer class="site-footer">
-      <div class="site-shell footer-grid">
-        <div>
-          <p class="eyebrow eyebrow-light">Continue the conversation</p>
-          <h2>Ideas become more useful<br/>when they are challenged.</h2>
+    <footer class="site-footer site-footer--compact">
+      <div class="site-shell compact-footer-row">
+        <div class="compact-footer-copy">
+          <p class="eyebrow">Continue the conversation</p>
+          <h2>Ideas get better when they are challenged.</h2>
         </div>
-        <div class="footer-action">
-          <p>If you are wrestling with enterprise transformation, AI, data or platform choices, I’m always interested in a thoughtful exchange.</p>
-          <a class="button button-light" href="https://www.linkedin.com/in/k-prashant/" target="_blank" rel="noreferrer">Connect on LinkedIn ↗</a>
+        <div class="compact-footer-actions">
+          <a class="text-link" href="https://www.linkedin.com/in/k-prashant/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+          <a class="text-link" href="mailto:hello@kumarprashant.net">Email me →</a>
         </div>
       </div>
       <div class="site-shell footer-bottom">
         <span>© {new Date().getFullYear()} Prashant Kumar</span>
-        <span><a href="mailto:hello@kumarprashant.net">hello@kumarprashant.net</a> · Adelaide, Australia</span>
+        <span>Adelaide, Australia · Working globally</span>
       </div>
     </footer>
   </body>
