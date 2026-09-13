@@ -26,18 +26,18 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   </head>
   <body>
     <header class="site-header">
-      <div class="container header-inner">
+      <div class="site-shell header-inner">
         <a class="brand" href="/" aria-label="Prashant Kumar home">
           <span class="brand-mark">PK</span>
-          <span>Prashant Kumar</span>
+          <strong>Prashant Kumar</strong>
         </a>
         <div class="header-actions">
           <nav class="nav" aria-label="Primary navigation">
             <a href="/lab/">Architecture Lab</a>
             <a href="/writing/">Writing</a>
-            <a href="/archive/">Archive</a>
             <a href="/experience/">Experience</a>
             <a href="/about/">About</a>
+            <a class="nav-secondary" href="/archive/">Archive</a>
           </nav>
           <a class="site-search-link" href="/search/" aria-label="Search the site">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" /></svg>
@@ -47,10 +47,20 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       </div>
     </header>
     <main><slot /></main>
-    <footer class="footer">
-      <div class="container footer-inner">
+    <footer class="site-footer">
+      <div class="site-shell footer-grid">
+        <div>
+          <p class="eyebrow eyebrow-light">Continue the conversation</p>
+          <h2>Ideas become more useful<br/>when they are challenged.</h2>
+        </div>
+        <div class="footer-action">
+          <p>If you are wrestling with enterprise transformation, AI, data or platform choices, I’m always interested in a thoughtful exchange.</p>
+          <a class="button button-light" href="https://www.linkedin.com/in/k-prashant/" target="_blank" rel="noreferrer">Connect on LinkedIn ↗</a>
+        </div>
+      </div>
+      <div class="site-shell footer-bottom">
         <span>© {new Date().getFullYear()} Prashant Kumar</span>
-        <span>Enterprise strategy · Architecture · AI · Transformation</span>
+        <span><a href="mailto:hello@kumarprashant.net">hello@kumarprashant.net</a> · Adelaide, Australia</span>
       </div>
     </footer>
   </body>
