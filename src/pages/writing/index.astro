@@ -15,28 +15,32 @@ const publishedRank = (value) => {
 };
 
 published.sort((a,b) => publishedRank(b.data.published) - publishedRank(a.data.published));
+
 const displayDate = (value) => {
   if (!value) return '';
   const date = value instanceof Date ? value : (/^\d{4}-\d{2}-\d{2}$/.test(value) ? new Date(`${value}T00:00:00Z`) : null);
   return date ? new Intl.DateTimeFormat('en-AU',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(date) : value;
 };
 
-const displayMeta = (entry) => {
+const uniqueLabels = (entry) => {
   const labels = [entry.data.category ?? 'Writing', ...entry.data.tags];
   const seen = new Set();
-  return labels
-    .filter((label) => {
-      const key = String(label).trim().toLowerCase();
-      if (!key || seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    })
-    .slice(0, 3)
-    .join(' · ');
+  return labels.filter((label) => {
+    const key = String(label).trim().toLowerCase();
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 };
+
+const displayMeta = (entry) => uniqueLabels(entry).slice(0, 3).join(' · ');
+const topicKey = (value) => String(value).trim().toLowerCase();
+const topics = [...new Set(published.flatMap((entry) => entry.data.tags.map((tag) => String(tag).trim())).filter(Boolean))].sort((a,b) => a.localeCompare(b));
+const recentLimit = 8;
+const hasOlder = published.length > recentLimit;
 ---
 <BaseLayout title="Writing — Prashant Kumar" description="Ideas on enterprise strategy, architecture, AI, data, platforms and strategic optionality.">
-  <section class="hero">
+  <section class="hero writing-hero">
     <div class="container">
       <p class="eyebrow">Writing</p>
       <h1>Ideas for decisions<br/>that outlive the slide deck.</h1>
@@ -44,11 +48,36 @@ const displayMeta = (entry) => {
     </div>
   </section>
 
-  <section class="section">
+  <section class="section writing-index-section">
     <div class="container">
-      <div class="writing-list">
-        {published.map((entry) => (
-          <a class="writing-row" href={`/writing/${entry.id}/`}>
+      <div class="writing-index-head">
+        <div>
+          <p class="eyebrow">Latest writing</p>
+          <h2>Thinking in public.</h2>
+        </div>
+        <a class="text-link writing-archive-link" href="/archive/">Browse the full archive →</a>
+      </div>
+
+      {topics.length > 0 && (
+        <div class="writing-topics" aria-label="Filter writing by topic">
+          <button class="filter-chip is-active" type="button" data-writing-filter="all">All</button>
+          {topics.map((topic) => (
+            <button class="filter-chip" type="button" data-writing-filter={topicKey(topic)}>{topic}</button>
+          ))}
+        </div>
+      )}
+
+      <p class="writing-filter-status" aria-live="polite"></p>
+
+      <div class="writing-list writing-index-list">
+        {published.map((entry, index) => (
+          <a
+            class="writing-row writing-index-row"
+            href={`/writing/${entry.id}/`}
+            data-writing-row
+            data-recent={index < recentLimit ? 'true' : 'false'}
+            data-topics={entry.data.tags.map(topicKey).join('|')}
+          >
             <div>
               <p class="meta">{displayMeta(entry)}</p>
               <h2>{entry.data.title}</h2>
@@ -59,15 +88,25 @@ const displayMeta = (entry) => {
         ))}
       </div>
 
+      {hasOlder && (
+        <p class="writing-more-note">Showing the latest {recentLimit} pieces. Older writing remains available in the <a href="/archive/">Archive</a> and through topic filters.</p>
+      )}
+
       {planned.length > 0 && (
-        <section class="planned-writing">
-          <p class="eyebrow">Taking shape</p>
-          <h2>Ideas I’m still pressure-testing.</h2>
-          <div class="grid">
+        <section class="planned-writing planned-writing--quiet">
+          <div class="planned-writing-head">
+            <div>
+              <p class="eyebrow">Taking shape</p>
+              <h2>Ideas I’m still pressure-testing.</h2>
+            </div>
+            <p>Early ideas, not promises. Some will become articles; others may change completely.</p>
+          </div>
+          <div class="writing-ideas-list">
             {planned.map((entry) => (
-              <article class="card">
-                <div><p class="meta">{entry.data.status}</p><h3>{entry.data.title}</h3><p>{entry.data.summary ?? entry.data.description}</p></div>
-                <span class="card-link">Planned article</span>
+              <article>
+                <span>{entry.data.status}</span>
+                <h3>{entry.data.title}</h3>
+                <p>{entry.data.summary ?? entry.data.description}</p>
               </article>
             ))}
           </div>
@@ -75,4 +114,26 @@ const displayMeta = (entry) => {
       )}
     </div>
   </section>
+
+  <script>
+    const buttons = [...document.querySelectorAll('[data-writing-filter]')];
+    const rows = [...document.querySelectorAll('[data-writing-row]')];
+    const status = document.querySelector('.writing-filter-status');
+
+    const applyFilter = (filter) => {
+      let visible = 0;
+      rows.forEach((row) => {
+        const topics = (row.dataset.topics || '').split('|').filter(Boolean);
+        const show = filter === 'all' ? row.dataset.recent === 'true' : topics.includes(filter);
+        row.hidden = !show;
+        if (show) visible += 1;
+      });
+
+      buttons.forEach((button) => button.classList.toggle('is-active', button.dataset.writingFilter === filter));
+      if (status) status.textContent = filter === 'all' ? '' : `${visible} ${visible === 1 ? 'article' : 'articles'} in this topic`;
+    };
+
+    buttons.forEach((button) => button.addEventListener('click', () => applyFilter(button.dataset.writingFilter || 'all')));
+    applyFilter('all');
+  </script>
 </BaseLayout>
