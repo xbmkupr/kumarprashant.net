@@ -1,12 +1,14 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
+const contentDate = z.union([z.string(), z.date()]).optional();
+
 const common = z.object({
   title: z.string(),
   description: z.string(),
   status: z.enum(['planned', 'active', 'published']),
-  published: z.string().optional(),
-  updated: z.string().optional(),
+  published: contentDate,
+  updated: contentDate,
   tags: z.array(z.string()).default([]),
   featured: z.boolean().default(false),
   summary: z.string().optional(),
