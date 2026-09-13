@@ -1,0 +1,126 @@
+---
+title: Conversational Utility Experience
+description: What happens when outage and planned-work capabilities are treated as reusable enterprise services rather than features trapped inside a portal?
+status: published
+published: September 2026
+experimentNo: 2
+eyebrow: Architecture Lab · Experiment 02
+featured: true
+summary: A voice-first prototype testing channel independence, conversational context and reusable customer capabilities.
+tags:
+  - Customer Experience
+  - Enterprise Architecture
+  - Voice
+  - AI
+  - Energy & Utilities
+---
+
+<p class="article-kicker">A small voice prototype became a useful architecture experiment in channel independence, conversational context and the difference between a customer capability and a user interface.</p>
+
+<section class="case-summary" aria-label="Case study at a glance">
+  <div><span>What I built</span><strong>Voice-first customer service prototype</strong></div>
+  <div><span>Architecture idea</span><strong>One journey, many channels</strong></div>
+  <div><span>What changed</span><strong>Channel became an interface, not the capability boundary</strong></div>
+  <div><span>Key lesson</span><strong>Context, identity and operational truth matter more than the device</strong></div>
+</section>
+
+## The question
+
+Customer experience is often discussed in terms of channels: portal, website, mobile app, contact centre or voice. But that framing can hide a more important architecture question:
+
+> Should customer capabilities belong to a channel, or should channels simply consume reusable enterprise capabilities?
+
+I wanted to make that question tangible. So I built a small proof of concept that allowed a customer to ask an Alexa device about synthetic electricity outages and planned work.
+
+## What I built
+
+The prototype used a deliberately simple synthetic utility data set and exposed a small set of customer-facing capabilities through conversational intents. A customer could ask whether power was out in a suburb, when supply might be restored, why an outage had occurred, and whether planned work was scheduled.
+
+The point was not to prove that Alexa should become a strategic customer channel. The point was to test whether the underlying customer capability could exist independently of the portal that normally presents it.
+
+<div class="callout">
+  <strong>Prototype boundary</strong>
+  <p>No production systems or customer data were used. The outage, planned-work and location data were synthetic. The prototype was designed to test architecture ideas, not production readiness.</p>
+</div>
+
+## The architecture in one view
+
+The experiment becomes more useful when the voice device is treated as one interchangeable channel rather than the centre of the solution.
+
+<div class="architecture-diagram architecture-diagram--wide" role="img" aria-label="Channels consume reusable customer capabilities, supported by enterprise services and authoritative operational source systems">
+  <div class="architecture-stage">
+    <span class="stage-label">Channels</span>
+    <h3>Customer channels</h3>
+    <ul><li>Voice assistant</li><li>Web portal</li><li>AI assistant</li><li>Contact centre</li></ul>
+  </div>
+  <div class="architecture-arrow" aria-hidden="true">→</div>
+  <div class="architecture-stage architecture-stage--highlight">
+    <span class="stage-label">Capability layer</span>
+    <h3>Reusable customer capabilities</h3>
+    <ul><li>Check outage status</li><li>Get restoration estimate</li><li>View planned work</li><li>Retain conversational context</li></ul>
+  </div>
+  <div class="architecture-arrow" aria-hidden="true">→</div>
+  <div class="architecture-stage">
+    <span class="stage-label">Enterprise services</span>
+    <h3>Shared services and controls</h3>
+    <ul><li>APIs and events</li><li>Customer context</li><li>Identity and consent</li><li>Business rules</li></ul>
+  </div>
+  <div class="architecture-arrow" aria-hidden="true">→</div>
+  <div class="architecture-stage">
+    <span class="stage-label">Operational truth</span>
+    <h3>Authoritative source systems</h3>
+    <ul><li>Outage data</li><li>Planned work schedules</li><li>Restoration updates</li><li>Operational systems of record</li></ul>
+  </div>
+</div>
+
+<p class="architecture-caption">The key architecture shift is that the channel becomes an interface layer, while the capability, context and operational truth live behind it.</p>
+
+## The first lesson: the portal is not the capability
+
+Once the same outage information could be consumed through voice, the architectural boundary became clearer. “Check my outage” is a customer capability. A web page is one possible interface to that capability.
+
+That distinction matters because new channels are likely to keep appearing. Voice assistants, AI agents, messaging platforms and future interfaces should not each require a new implementation of the underlying business logic.
+
+## The second lesson: conversation changes the integration problem
+
+A portal request is usually explicit and self-contained. Conversation is not. After asking “Why is my power out?”, a customer naturally follows with “When will it be back?”
+
+That second question only makes sense if the interaction retains enough context to know which outage, customer or location the user is referring to. In the prototype, this quickly exposed the difference between implementing isolated intents and designing a coherent conversational journey.
+
+That is useful beyond voice. The same issue appears with AI assistants and agentic interfaces: context, identity and continuity become architecture concerns rather than presentation concerns.
+
+## The third lesson: location is useful, but it is also a boundary
+
+The prototype explored using device location so a customer could ask a natural question such as “Why is my power out?” without naming a suburb every time.
+
+That created an immediate set of questions: What happens when location permission is unavailable? What if the device location is stale? What if the user is outside the service area? When should the experience fall back to explicitly asking for location?
+
+Those are small prototype questions, but they mirror larger enterprise concerns around identity, consent, context quality and graceful degradation.
+
+## Where AI fits — and where it does not
+
+There is an obvious temptation to make every conversational prototype “AI powered”. I deliberately treated AI as optional rather than foundational.
+
+Deterministic facts such as outage status, restoration estimates and planned-work windows should come from authoritative enterprise capabilities. AI can improve interpretation, natural-language interaction and orchestration, but it should not invent operational truth.
+
+> The model can help interpret the question. It should not become the source of truth for the answer.
+
+## The architecture implication
+
+The prototype reinforced a principle I keep returning to: **one journey, many channels**.
+
+That does not mean every channel must provide an identical user experience. It means the underlying customer journey, business rules, data and controls should be reusable enough that a new channel does not require the enterprise to reconstruct the capability from scratch.
+
+In a larger customer transformation, that pushes architecture attention toward APIs, events, customer context, identity, consent and clear system boundaries — not simply toward the features available in the selected CRM or portal product.
+
+## What I would do next
+
+The next iteration would replace the prototype-specific logic with a small channel-neutral service layer and expose the same capabilities through more than one interface. A web experience, a conversational AI client and voice could then consume the same services.
+
+> Can one enterprise customer capability support many current and future channels without coupling the business journey to any one of them?
+
+## What I learned
+
+The value of this experiment was not the technology stack. It was that a small working prototype made an abstract architecture principle visible. Once people could see the same customer information appearing through a completely different channel, the conversation shifted from “Should we build an Alexa skill?” to “Where should this capability actually live?”
+
+That is the kind of question I want the Architecture Lab to keep testing: small builds that create better enterprise architecture conversations.
