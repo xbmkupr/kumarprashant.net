@@ -8,6 +8,7 @@ const {
   eyebrow = 'Writing',
   published,
   updated,
+  tags = [],
   image = '/social-card.png',
   comments = true
 } = Astro.props;
@@ -15,6 +16,7 @@ const {
 const shareUrl = new URL(Astro.url.pathname, Astro.site).toString();
 const linkedInShare = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
 const emailShare = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(`${title}\n\n${shareUrl}`)}`;
+const tagSlug = (tag) => tag.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 ---
 <BaseLayout title={`${title} — Prashant Kumar`} description={description} image={image}>
   <article class="prose article-page">
@@ -35,6 +37,11 @@ const emailShare = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeUR
           {published && updated && <> · </>}
           {updated && <>Updated {updated}</>}
         </p>
+      )}
+      {tags.length > 0 && (
+        <div class="tag-list article-tags" aria-label="Topics">
+          {tags.map((tag) => <a class="tag-pill" href={`/tags/${tagSlug(tag)}/`}>{tag}</a>)}
+        </div>
       )}
     </header>
 
