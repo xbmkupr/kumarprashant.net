@@ -9,7 +9,7 @@ import '../styles/overrides.css';
 const {
   title = 'Prashant Kumar — Enterprise Strategy & Architecture',
   description = 'Enterprise strategy, architecture and responsible AI — practical thinking, experiments and writing from Prashant Kumar.',
-  image = '/social-card.webp',
+  image = '/social-card.jpg',
   type = 'website'
 } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -34,7 +34,8 @@ const isActive = (section) => pathname === section || pathname.startsWith(`${sec
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={socialImage} />
     <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image:height" content="627" />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:alt" content="Prashant Kumar — Enterprise Strategy, Architecture and Responsible AI" />
 
     <meta name="twitter:card" content="summary_large_image" />
