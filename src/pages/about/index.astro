@@ -38,6 +38,44 @@ import SectionMark from '../../components/SectionMark.astro';
     </div>
   </section>
 
+  <section class="section reading-now">
+    <div class="container reading-now-grid">
+      <div class="reading-now-intro">
+        <p class="eyebrow">Currently reading</p>
+        <h2>What is shaping<br/>my thinking now.</h2>
+        <p>A small, changing selection of ideas I am reading — not as endorsements, but as useful provocations.</p>
+      </div>
+      <div class="reading-now-list">
+        <article>
+          <span>01</span>
+          <div><h3>Laws of Software Engineering</h3><p class="book-author">Dr Milan Milanović</p><p>A compact vocabulary for the forces that shape software systems, teams and the decisions around them.</p></div>
+        </article>
+        <article>
+          <span>02</span>
+          <div><h3>AI Demystified</h3><p class="book-author">Antonio Weiss</p><p>A pragmatic bridge between AI’s technical possibility and the choices leaders need to make at work.</p></div>
+        </article>
+        <article>
+          <span>03</span>
+          <div><h3>Orchestrating Experiences</h3><p class="book-author">Chris Risdon &amp; Patrick Quattlebaum</p><p>Exploring how fragmented organisations can align people, channels and systems around coherent experiences.</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section speaking-section">
+    <div class="container speaking-grid">
+      <div>
+        <p class="eyebrow">Speaking & conversations</p>
+        <h2>Ideas are better<br/>when spoken aloud.</h2>
+      </div>
+      <div class="speaking-copy">
+        <p class="lead-copy">I enjoy speaking about enterprise architecture, AI, digital transformation and the choices organisations face when technology moves faster than governance.</p>
+        <p>I’ve spoken at architecture community meetups and internal forums, and I’m always interested in thoughtful industry conversations, panels and conference sessions where I can contribute something useful.</p>
+        <a class="text-link" href="mailto:hello@kumarprashant.net?subject=Speaking%20invitation">Invite me to speak →</a>
+      </div>
+    </div>
+  </section>
+
   <section class="quote-section">
     <div class="container quote-grid">
       <p class="eyebrow eyebrow-light">Why the Lab exists</p>
@@ -45,4 +83,29 @@ import SectionMark from '../../components/SectionMark.astro';
       <p class="quote-note">The Architecture Lab is where I test ideas in public, learn by building and turn technology curiosity into evidence.</p>
     </div>
   </section>
+
+  <style>
+    .reading-now-grid,
+    .speaking-grid {
+      display:grid;
+      grid-template-columns:.72fr 1.28fr;
+      gap:90px;
+      align-items:start;
+    }
+    .reading-now-intro h2,
+    .speaking-grid h2 { font-size:clamp(36px,4vw,48px); line-height:1.08; }
+    .reading-now-intro > p:last-child { max-width:390px; margin:24px 0 0; color:var(--muted); font-size:14px; line-height:1.7; }
+    .reading-now-list { border-top:1px solid var(--line); }
+    .reading-now-list article { display:grid; grid-template-columns:42px 1fr; gap:24px; padding:28px 0; border-bottom:1px solid var(--line); }
+    .reading-now-list article > span { padding-top:4px; color:var(--amber); font-size:11px; font-weight:800; letter-spacing:.14em; }
+    .reading-now-list h3 { margin:0; font:400 25px/1.2 Georgia,serif; }
+    .book-author { margin:6px 0 12px !important; color:var(--blue) !important; font-size:11px !important; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
+    .reading-now-list article div > p:last-child { max-width:620px; margin:0; color:var(--muted); font-size:14px; line-height:1.65; }
+    .speaking-copy .lead-copy { margin:0 0 20px; font:400 25px/1.5 Georgia,serif; }
+    .speaking-copy > p:not(.lead-copy) { max-width:680px; margin:0 0 26px; color:var(--muted); font-size:15px; line-height:1.72; }
+    @media (max-width:900px) {
+      .reading-now-grid,
+      .speaking-grid { grid-template-columns:1fr; gap:44px; }
+    }
+  </style>
 </BaseLayout>
