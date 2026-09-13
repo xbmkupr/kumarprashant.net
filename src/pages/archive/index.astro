@@ -1,0 +1,99 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const experiments = await getCollection('experiments', ({ data }) => data.status === 'published' && !!data.published);
+const writing = await getCollection('writing', ({ data }) => data.status === 'published' && !!data.published);
+
+const parsePublished = (value) => {
+  if (!value) return null;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    const [year, month, day] = value.split('-').map(Number);
+    return new Date(Date.UTC(year, month - 1, day));
+  }
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+};
+
+const items = [
+  ...experiments.map((entry) => ({
+    title: entry.data.title,
+    type: 'Architecture Lab',
+    href: `/lab/${entry.id}/`,
+    published: entry.data.published,
+    date: parsePublished(entry.data.published),
+    tags: entry.data.tags
+  })),
+  ...writing.map((entry) => ({
+    title: entry.data.title,
+    type: 'Writing',
+    href: `/writing/${entry.id}/`,
+    published: entry.data.published,
+    date: parsePublished(entry.data.published),
+    tags: entry.data.tags
+  }))
+].filter((item) => item.date).sort((a, b) => b.date.getTime() - a.date.getTime());
+
+const years = new Map();
+for (const item of items) {
+  const year = item.date.getUTCFullYear();
+  const month = item.date.toLocaleString('en-AU', { month: 'long', timeZone: 'UTC' });
+  if (!years.has(year)) years.set(year, new Map());
+  const months = years.get(year);
+  if (!months.has(month)) months.set(month, []);
+  months.get(month).push(item);
+}
+
+const currentYear = new Date().getUTCFullYear();
+const formatDay = (date) => new Intl.DateTimeFormat('en-AU', { day: '2-digit', timeZone: 'UTC' }).format(date);
+---
+<BaseLayout title="Archive — Prashant Kumar" description="A chronological archive of Architecture Lab experiments and writing.">
+  <section class="hero archive-hero">
+    <div class="container">
+      <p class="eyebrow">Archive</p>
+      <h1>Everything, in time.</h1>
+      <p class="lede">A chronological record of published experiments and writing. Migrated articles retain their original publication dates.</p>
+    </div>
+  </section>
+
+  <section class="section archive-section">
+    <div class="container archive-container">
+      {items.length === 0 ? (
+        <p class="archive-empty">Published work will appear here as the archive grows.</p>
+      ) : (
+        <div class="archive-tree">
+          {[...years.entries()].map(([year, months], yearIndex) => (
+            <details class="archive-year" open={year === currentYear || yearIndex === 0}>
+              <summary>
+                <span class="archive-year-title">{year}</span>
+                <span class="archive-year-count">{[...months.values()].reduce((count, monthItems) => count + monthItems.length, 0)} items</span>
+              </summary>
+
+              <div class="archive-months">
+                {[...months.entries()].map(([month, monthItems]) => (
+                  <section class="archive-month">
+                    <h2>{month}</h2>
+                    <div class="archive-items">
+                      {monthItems.map((item) => (
+                        <article class="archive-item">
+                          <time datetime={item.published}>{formatDay(item.date)}</time>
+                          <div class="archive-item-main">
+                            <a class="archive-item-title" href={item.href}>{item.title}</a>
+                            <span class="archive-item-type">{item.type}</span>
+                          </div>
+                          <div class="archive-item-tags" aria-label="Topics">
+                            {item.tags.slice(0, 2).map((tag) => <span>{tag}</span>)}
+                          </div>
+                        </article>
+                      ))}
+                    </div>
+                  </section>
+                ))}
+              </div>
+            </details>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
