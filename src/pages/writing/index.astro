@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionMark from '../../components/SectionMark.astro';
 
 const entries = await getCollection('writing');
 const published = entries.filter((entry) => entry.data.status === 'published');
@@ -42,7 +43,7 @@ const hasOlder = published.length > recentLimit;
 <BaseLayout title="Writing — Prashant Kumar" description="Ideas on enterprise strategy, architecture, AI, data, platforms and strategic optionality.">
   <section class="hero writing-hero">
     <div class="container">
-      <p class="eyebrow">Writing</p>
+      <div class="section-identity"><SectionMark kind="writing" size="md" tone="blue" /><p class="eyebrow">Writing</p></div>
       <h1>Ideas for decisions<br/>that outlive the slide deck.</h1>
       <p class="lede">I write about the choices beneath enterprise transformation — where architecture, AI, data, platforms and organisational judgement meet.</p>
     </div>
