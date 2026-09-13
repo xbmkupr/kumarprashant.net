@@ -17,6 +17,13 @@ const shareUrl = new URL(Astro.url.pathname, Astro.site).toString();
 const linkedInShare = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
 const emailShare = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(`${title}\n\n${shareUrl}`)}`;
 const tagSlug = (tag) => tag.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const formatDate = (value) => {
+  if (!value) return value;
+  const iso = /^\d{4}-\d{2}-\d{2}$/.test(value);
+  if (!iso) return value;
+  const [year, month, day] = value.split('-').map(Number);
+  return new Intl.DateTimeFormat('en-AU', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(Date.UTC(year, month - 1, day)));
+};
 ---
 <BaseLayout title={`${title} — Prashant Kumar`} description={description} image={image}>
   <article class="prose article-page">
@@ -33,9 +40,9 @@ const tagSlug = (tag) => tag.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/
       {description && <p class="lede">{description}</p>}
       {(published || updated) && (
         <p class="article-date">
-          {published && <>Published {published}</>}
+          {published && <>Published {formatDate(published)}</>}
           {published && updated && <> · </>}
-          {updated && <>Updated {updated}</>}
+          {updated && <>Updated {formatDate(updated)}</>}
         </p>
       )}
       {tags.length > 0 && (
