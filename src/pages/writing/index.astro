@@ -3,32 +3,62 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const entries = await getCollection('writing');
+const published = entries.filter((entry) => entry.data.status === 'published');
+const planned = entries.filter((entry) => entry.data.status !== 'published');
+
+const publishedRank = (value) => {
+  if (!value) return 0;
+  if (value instanceof Date) return value.getTime();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return new Date(`${value}T00:00:00Z`).getTime();
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? 0 : parsed.getTime();
+};
+
+published.sort((a,b) => publishedRank(b.data.published) - publishedRank(a.data.published));
+const displayDate = (value) => {
+  if (!value) return '';
+  const date = value instanceof Date ? value : (/^\d{4}-\d{2}-\d{2}$/.test(value) ? new Date(`${value}T00:00:00Z`) : null);
+  return date ? new Intl.DateTimeFormat('en-AU',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(date) : value;
+};
 ---
-<BaseLayout title="Writing — Prashant Kumar" description="Writing on enterprise architecture, AI, digital transformation and technology strategy.">
+<BaseLayout title="Writing — Prashant Kumar" description="Ideas on enterprise strategy, architecture, AI, data, platforms and strategic optionality.">
   <section class="hero">
     <div class="container">
       <p class="eyebrow">Writing</p>
-      <h1>Ideas, observations and lessons from the work.</h1>
-      <p class="lede">Longer-form notes on enterprise architecture, AI, transformation and the practical trade-offs behind technology decisions.</p>
+      <h1>Ideas for decisions<br/>that outlive the slide deck.</h1>
+      <p class="lede">I write about the choices beneath enterprise transformation — where architecture, AI, data, platforms and organisational judgement meet.</p>
     </div>
   </section>
+
   <section class="section">
-    <div class="container grid">
-      {entries.map((entry) => (
-        <article class="card">
-          <div>
-            <p class="meta">{entry.data.category ?? entry.data.status}</p>
-            <h3>{entry.data.title}</h3>
-            <p>{entry.data.summary ?? entry.data.description}</p>
-            <div class="tag-list" aria-label="Topics">
-              {entry.data.tags.slice(0, 4).map((tag) => <a class="tag-pill" href={`/tags/${encodeURIComponent(tag.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''))}/`}>{tag}</a>)}
+    <div class="container">
+      <div class="writing-list">
+        {published.map((entry) => (
+          <a class="writing-row" href={`/writing/${entry.id}/`}>
+            <div>
+              <p class="meta">{entry.data.category ?? 'Writing'} · {entry.data.tags.slice(0,2).join(' · ')}</p>
+              <h2>{entry.data.title}</h2>
+              <p>{entry.data.summary ?? entry.data.description}</p>
             </div>
+            <time>{displayDate(entry.data.published)}</time>
+          </a>
+        ))}
+      </div>
+
+      {planned.length > 0 && (
+        <section class="planned-writing">
+          <p class="eyebrow">Taking shape</p>
+          <h2>Ideas I’m still pressure-testing.</h2>
+          <div class="grid">
+            {planned.map((entry) => (
+              <article class="card">
+                <div><p class="meta">{entry.data.status}</p><h3>{entry.data.title}</h3><p>{entry.data.summary ?? entry.data.description}</p></div>
+                <span class="card-link">Planned article</span>
+              </article>
+            ))}
           </div>
-          {entry.data.status === 'published'
-            ? <a class="card-link" href={`/writing/${entry.id}/`}>Read the article →</a>
-            : <span class="card-link">Planned article</span>}
-        </article>
-      ))}
+        </section>
+      )}
     </div>
   </section>
 </BaseLayout>
