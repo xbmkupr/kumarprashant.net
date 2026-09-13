@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionMark from '../../components/SectionMark.astro';
 
 const entries = (await getCollection('experiments')).sort((a, b) => a.data.experimentNo - b.data.experimentNo);
 const tags = [...new Set(entries.flatMap((entry) => entry.data.tags))].sort();
@@ -8,7 +9,7 @@ const tags = [...new Set(entries.flatMap((entry) => entry.data.tags))].sort();
 <BaseLayout title="Architecture Lab — Prashant Kumar" description="Practical experiments in enterprise architecture, AI, data and digital transformation.">
   <section class="hero">
     <div class="container">
-      <p class="eyebrow">Architecture Lab</p>
+      <div class="section-identity"><SectionMark kind="lab" size="md" tone="blue" /><p class="eyebrow">Architecture Lab</p></div>
       <h1>Learning by building, not just reading.</h1>
       <p class="lede">A public record of practical experiments designed to test architecture ideas against working technology, real constraints and observable outcomes.</p>
     </div>
