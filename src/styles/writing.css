@@ -1,0 +1,76 @@
+.writing-hero { padding-bottom: 54px; }
+.writing-index-section { padding-top: 54px; }
+.writing-index-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: end;
+  margin-bottom: 30px;
+}
+.writing-index-head h2 { font-size: clamp(32px, 3.5vw, 44px); line-height: 1.08; }
+.writing-archive-link { margin-bottom: 6px; white-space: nowrap; }
+.writing-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.writing-filter-status {
+  min-height: 22px;
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: .82rem;
+}
+.writing-index-list { margin-top: 0; }
+.writing-index-row[hidden] { display: none; }
+.writing-more-note {
+  margin: 22px 0 0;
+  color: var(--muted);
+  font-size: .82rem;
+}
+.writing-more-note a { color: var(--ink); border-bottom: 1px solid currentColor; }
+
+.planned-writing--quiet {
+  margin-top: 78px;
+  padding-top: 38px;
+  border-top: 1px solid var(--line);
+}
+.planned-writing-head {
+  display: grid;
+  grid-template-columns: 1fr minmax(240px, 420px);
+  gap: 52px;
+  align-items: end;
+  margin-bottom: 28px;
+}
+.planned-writing-head h2 { font-size: clamp(28px, 3vw, 38px); line-height: 1.12; }
+.planned-writing-head > p {
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: .88rem;
+  line-height: 1.65;
+}
+.writing-ideas-list { border-top: 1px solid var(--line); }
+.writing-ideas-list article {
+  display: grid;
+  grid-template-columns: 100px minmax(220px, .8fr) 1.2fr;
+  gap: 24px;
+  align-items: start;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+.writing-ideas-list span {
+  color: var(--amber);
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.writing-ideas-list h3 { margin: 0; font: 400 21px/1.25 Georgia, serif; }
+.writing-ideas-list p { margin: 0; color: var(--muted); font-size: .84rem; line-height: 1.6; }
+
+@media (max-width: 820px) {
+  .writing-index-head,
+  .planned-writing-head { grid-template-columns: 1fr; gap: 18px; }
+  .writing-archive-link { justify-self: start; }
+  .writing-ideas-list article { grid-template-columns: 1fr; gap: 8px; }
+}
