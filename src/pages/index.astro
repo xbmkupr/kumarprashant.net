@@ -3,8 +3,15 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const experiments = (await getCollection('experiments')).sort((a,b) => a.data.experimentNo - b.data.experimentNo);
+const publishedRank = (value) => {
+  if (!value) return 0;
+  if (value instanceof Date) return value.getTime();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return new Date(`${value}T00:00:00Z`).getTime();
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? 0 : parsed.getTime();
+};
 const publishedWriting = (await getCollection('writing', ({ data }) => data.status === 'published'))
-  .sort((a,b) => String(b.data.published ?? '').localeCompare(String(a.data.published ?? '')))
+  .sort((a,b) => publishedRank(b.data.published) - publishedRank(a.data.published))
   .slice(0, 3);
 ---
 <BaseLayout>
