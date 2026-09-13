@@ -1,5 +1,9 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const entries = (await getCollection('experiments')).sort((a, b) => a.data.experimentNo - b.data.experimentNo);
+const tags = [...new Set(entries.flatMap((entry) => entry.data.tags))].sort();
 ---
 <BaseLayout title="Architecture Lab — Prashant Kumar" description="Practical experiments in enterprise architecture, AI, data and digital transformation.">
   <section class="hero">
@@ -9,14 +13,44 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <p class="lede">A public record of practical experiments designed to test architecture ideas against working technology, real constraints and observable outcomes.</p>
     </div>
   </section>
+
   <section class="section">
-    <div class="container grid">
-      <article class="card"><div><p class="meta">01 · Published</p><h3>CRM Prototype Studio</h3><p>AI-assisted enterprise delivery across Salesforce, Snowflake and governed human approvals.</p></div><a class="card-link" href="/lab/crm-prototype-studio/">Read the case study →</a></article>
-      <article class="card"><div><p class="meta">02 · Published</p><h3>Conversational Utility Experience</h3><p>Voice-first outage and planned-work interactions using Alexa and synthetic utility data.</p></div><a class="card-link" href="/lab/conversational-utility-experience/">Read the case study →</a></article>
-      <article class="card"><div><p class="meta">03 · Planned</p><h3>Customer Event Digital Twin</h3><p>Testing how operational events, customer context and governed AI can create a more responsive experience.</p></div><span class="card-link">Next experiment</span></article>
-      <article class="card"><div><p class="meta">04 · Planned</p><h3>One Journey, Many Channels</h3><p>Separating customer capability from the interface by exposing the same services across multiple channels.</p></div><span class="card-link">On the roadmap</span></article>
-      <article class="card"><div><p class="meta">05 · Planned</p><h3>Enterprise Agent Control Plane</h3><p>A vendor-neutral experiment in agent identity, policy, authority, human approval and auditability.</p></div><span class="card-link">On the roadmap</span></article>
-      <article class="card"><div><p class="meta">06 · Planned</p><h3>Architecture Intelligence</h3><p>Exploring what changes when architecture knowledge, decisions and models become machine-readable.</p></div><span class="card-link">On the roadmap</span></article>
+    <div class="container">
+      <div class="content-toolbar" aria-label="Filter experiments by topic">
+        <button class="filter-chip is-active" type="button" data-filter="all">All</button>
+        {tags.map((tag) => <button class="filter-chip" type="button" data-filter={tag}>{tag}</button>)}
+      </div>
+
+      <div class="grid content-grid" id="experiment-grid">
+        {entries.map((entry) => (
+          <article class="card content-card" data-tags={entry.data.tags.join('|')}>
+            <div>
+              <p class="meta">{String(entry.data.experimentNo).padStart(2, '0')} · {entry.data.status}</p>
+              <h3>{entry.data.title}</h3>
+              <p>{entry.data.summary ?? entry.data.description}</p>
+              <div class="tag-list" aria-label="Topics">
+                {entry.data.tags.slice(0, 4).map((tag) => <a class="tag-pill" href={`/tags/${encodeURIComponent(tag.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''))}/`}>{tag}</a>)}
+              </div>
+            </div>
+            {entry.data.status === 'published'
+              ? <a class="card-link" href={`/lab/${entry.id}/`}>Read the case study →</a>
+              : <span class="card-link">{entry.data.status === 'active' ? 'In progress' : 'On the roadmap'}</span>}
+          </article>
+        ))}
+      </div>
     </div>
   </section>
+
+  <script is:inline>
+    const chips = [...document.querySelectorAll('.filter-chip')];
+    const cards = [...document.querySelectorAll('.content-card')];
+    chips.forEach((chip) => chip.addEventListener('click', () => {
+      const filter = chip.getAttribute('data-filter');
+      chips.forEach((item) => item.classList.toggle('is-active', item === chip));
+      cards.forEach((card) => {
+        const tags = (card.getAttribute('data-tags') || '').split('|');
+        card.hidden = filter !== 'all' && !tags.includes(filter);
+      });
+    }));
+  </script>
 </BaseLayout>
