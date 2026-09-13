@@ -1,0 +1,44 @@
+.section-identity {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.section-identity .eyebrow { margin: 0; }
+
+.section-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: var(--ink);
+  opacity: .88;
+}
+.section-mark svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.55;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.section-mark--sm { width: 25px; height: 25px; }
+.section-mark--md { width: 31px; height: 31px; }
+.section-mark--lg { width: 38px; height: 38px; }
+.section-mark--ink { color: var(--ink); }
+.section-mark--blue { color: var(--blue); }
+.section-mark--light { color: var(--white); opacity: .82; }
+
+.brand-path-icon {
+  min-height: 34px;
+  display: flex;
+  align-items: flex-start;
+}
+.brand-path-grid a:hover .section-mark { color: var(--blue); opacity: 1; }
+
+@media (max-width: 600px) {
+  .section-identity { gap: 10px; margin-bottom: 15px; }
+  .section-mark--md { width: 28px; height: 28px; }
+}
